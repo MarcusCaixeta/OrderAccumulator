@@ -5,9 +5,3 @@
 /.vs
 /bin/Debug/net8.0
 /obj
-/src/OrderAccumulator.Contracts/obj
-/src/OrderAccumulator.Contracts/bin/Debug/net8.0
-/src/OrderAccumulator.Infrastructure/obj
-/src/OrderAccumulator.Tests/obj
-/src/OrderAccumulator.Infrastructure/bin/Debug/net8.0
-/src/OrderAccumulator.Tests/bin/Debug/net8.0

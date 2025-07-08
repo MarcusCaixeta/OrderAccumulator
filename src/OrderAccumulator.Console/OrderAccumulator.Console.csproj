@@ -12,16 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Fix\fix.cfg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FIX44.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\OrderAccumulator.Contracts\OrderAccumulator.Contracts.csproj" />
+    <ProjectReference Include="..\OrderAccumulator.Infrastructure\OrderAccumulator.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="src\" />
+    <None Update="FIX44.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
