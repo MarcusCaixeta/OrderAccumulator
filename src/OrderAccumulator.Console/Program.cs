@@ -1,17 +1,10 @@
-﻿using QuickFix;
-using OrderAccumulator.Infrastructure.Fix;
-using OrderAccumulator.Contracts.Interfaces;
-using OrderAccumulator.Infrastructure.Services;
-
+﻿using OrderAccumulator.ConsoleApp;
 
 class Program
 {
     static void Main()
     {
-        var processor = new OrderProcessor();
-        IApplication fixApp = new FixServer(processor); 
-        IFixServerBootstrapper bootstrapper = new FixServerBootstrapper("Fix/fix.cfg", fixApp);
-
+        var bootstrapper = CompositionRoot.ConfigureFixServer();
         bootstrapper.Start();
 
         Console.WriteLine("Aguardando Orders... Pressione ENTER para sair.");
@@ -20,4 +13,3 @@ class Program
         bootstrapper.Stop();
     }
 }
-

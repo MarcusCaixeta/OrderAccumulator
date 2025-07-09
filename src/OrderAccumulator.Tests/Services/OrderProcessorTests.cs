@@ -215,5 +215,59 @@ namespace OrderAccumulator.Tests.Services
             Assert.Contains("lado inválido", message, StringComparison.OrdinalIgnoreCase);
         }
 
+        [Fact]
+        public void SellOrder_DeveReduzirExposicao()
+        {
+            _processor.TryProcessOrder("VALE3", 1000, 50, '1', out _); // +50.000
+
+            var result = _processor.TryProcessOrder("VALE3", 500, 50, '2', out var message); // -25.000
+            Assert.True(result);
+            Assert.Contains("ACCEPTED", message);
+        }
+        [Fact]
+        public void VendaSemCompra_DeveSerRejeitadaAoUltrapassarLimite()
+        {
+            var result = _processor.TryProcessOrder("VALE3", 1_100_000, 100, '2', out var message); // -110M
+            Assert.False(result);
+            Assert.Contains("REJECTED", message);
+        }
+        [Fact]
+        public void VendaDepoisCompra_DeveReequilibrarExposicao()
+        {
+            _processor.TryProcessOrder("VALE3", 50, 999m, '2', out _);
+
+            var result = _processor.TryProcessOrder("VALE3", 60, 999m, '1', out var message);
+
+            Assert.True(result);
+            Assert.Contains("ACCEPTED", message);
+        }
+
+        [Theory]
+        [InlineData(0.011)]
+        [InlineData(99.999)]
+        [InlineData(100.001)]
+        public void PrecoComMuitasCasasNaoMultiploDe001_DeveSerRejeitado(decimal preco)
+        {
+            var result = _processor.TryProcessOrder("PETR4", 1000, preco, '1', out var message);
+
+            Assert.False(result);
+            Assert.Contains("REJECTED", message);
+            Assert.Contains("preço inválido", message, StringComparison.OrdinalIgnoreCase);
+        }
+        [Fact]
+        public void OrdemQueLevaExposicaoAExatamente100Milhoes_DeveSerAceita()
+        {
+            var price = 100m;
+            var quantity1 = 999_000; // 999000 * 100 = 99.900.000
+            var quantity2 = 1000;    // 1000 * 100 = 100.000 → total = 100.000.000
+
+            _processor.TryProcessOrder("PETR4", quantity1, price, '1', out _);
+            var result = _processor.TryProcessOrder("PETR4", quantity2, price, '1', out var message);
+
+            Assert.True(result);
+            Assert.Contains("ACCEPTED", message);
+        }
+
+
     }
 }

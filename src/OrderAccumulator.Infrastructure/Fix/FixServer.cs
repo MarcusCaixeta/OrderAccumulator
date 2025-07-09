@@ -40,17 +40,21 @@ namespace OrderAccumulator.Infrastructure.Fix
         private void SendExecutionReport(QuickFix.FIX44.NewOrderSingle order, SessionID sessionID,
             char execType, char ordStatus, decimal leavesQty, decimal cumQty, decimal avgPx)
         {
-            var report = new QuickFix.FIX44.ExecutionReport(
-                new OrderID(Guid.NewGuid().ToString()),
-                new ExecID(Guid.NewGuid().ToString()),
-                new ExecType(execType),
-                new OrdStatus(ordStatus),
-                order.Symbol,
-                order.Side,
-                new LeavesQty(leavesQty),
-                new CumQty(cumQty),
-                new AvgPx(avgPx)
-            );
+            var report = new QuickFix.FIX44.ExecutionReport();
+
+            // Campos obrigatórios
+            report.Set(new OrderID(Guid.NewGuid().ToString()));
+            report.Set(new ExecID(Guid.NewGuid().ToString()));
+            report.Set(new ExecType(execType));
+            report.Set(new OrdStatus(ordStatus));
+            report.Set(new ClOrdID(order.ClOrdID.Value));
+            report.Set(order.Symbol);
+            report.Set(order.Side);
+            report.Set(new LeavesQty(leavesQty));
+            report.Set(new CumQty(cumQty));
+            report.Set(new AvgPx(avgPx));
+
+
 
             Session.SendToTarget(report, sessionID);
         }

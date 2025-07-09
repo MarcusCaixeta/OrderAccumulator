@@ -10,9 +10,7 @@ namespace OrderAccumulator.Infrastructure.Services
 
         public bool TryProcessOrder(string symbol, decimal quantity, decimal price, char side, out string message)
         {
-            if (!IsValidSymbol(symbol, out message) ||
-                !IsValidSide(side, out message) ||
-                !IsValidQuantity(quantity, out message) ||
+            if (!IsValidSymbol(symbol, out message) || !IsValidSide(side, out message) || !IsValidQuantity(quantity, out message) ||
                 !IsValidPrice(price, out message))
             {
                 return false;
@@ -24,7 +22,7 @@ namespace OrderAccumulator.Infrastructure.Services
 
             if (Math.Abs(newExposure) > ExposureLimit)
             {
-                message = $"REJECTED: {symbol} exposure = {newExposure:C2}";
+                message = $"REJECTED: {symbol} exposure = {currentExposure:C2}";
                 return false;
             }
 
@@ -76,6 +74,11 @@ namespace OrderAccumulator.Infrastructure.Services
             message = string.Empty;
             return true;
         }
+        public decimal GetExposure(string symbol)
+        {
+            return _exposureBySymbol.TryGetValue(symbol, out var value) ? value : 0m;
+        }
+
     }
 
 }
