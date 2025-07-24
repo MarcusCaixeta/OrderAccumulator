@@ -11,3 +11,6 @@
 /src/OrderAccumulator.Tests/obj
 /src/OrderAccumulator.Infrastructure/bin/Debug/net8.0
 /src/OrderAccumulator.Tests/bin/Debug/net8.0
+/src/OrderAccumulatorWorkerService/bin/Debug/net8.0
+/src/OrderAccumulatorWorkerService/obj
+/src/OrderAccumulatorWorkerService/store
